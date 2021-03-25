@@ -13,6 +13,7 @@ object Parser {
     case (Some(integer), None, None) => Expr.Num(integer.toDouble)
     case (Some(integer), Some(_), Some(fraction)) => Expr.Num(integer.toDouble + fraction.toDouble / 10)
     case (_, _, Some(fraction)) => Expr.Num(fraction.toDouble / 10)
+    case _ => throw new NumberFormatException("attempted number parsing but nothing to parse?")
   }
 
   def integer0[_: P] = P(CharsWhileIn("0-9"))
