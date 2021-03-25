@@ -1,4 +1,4 @@
-package langtest.define
+package hana.define
 
 import fastparse._
 import MultiLineWhitespace._
