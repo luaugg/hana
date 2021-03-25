@@ -6,8 +6,8 @@ import MultiLineWhitespace._
 object Parser {
   def string[_: P] = string0.map(Expr.Str)
   def identifier[_: P] = identifier0.!.map(Expr.Ident)
-  def expr[_: P] = P(string | identifier | map | number)
-  def map[_: P] = P("%{" ~/ (expr ~ "->" ~/ expr).rep(0, ",") ~ "}").map(entries => Expr.Map(entries.toMap))
+  def expr[_: P]: P[Expr] = P(string | identifier | map | number)
+  def map[_: P] = P("{" ~/ (expr ~ "->" ~/ expr).rep(0, ",") ~ "}").map(entries => Expr.Map(entries.toMap))
 
   def number[_: P] = P(integer0.!.? ~ ".".!.? ~ integer0.!.?).map {
     case (_, Some(_), None) => throw new NumberFormatException("no fractional component in decimal literal")

@@ -48,5 +48,11 @@ object ParserTests extends TestSuite {
       val Parsed.Success(Expr.Ident(ident), _) = parse("_a1", expr(_))
       ident ==> "_a1"
     }
+
+    test("parse map") {
+      val Parsed.Success(Expr.Map(map), _) = parse("{abc -> 54321, \"foo\" -> bar}", expr(_))
+      map(Expr.Str("foo")) ==> Expr.Ident("bar")
+      map(Expr.Ident("abc")) ==> Expr.Num(54321)
+    }
   }
 }
