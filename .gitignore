@@ -1,0 +1,9 @@
+.coursier
+.idea_modules
+.idea/*.xml
+.idea/markdown-navigator
+.idea/copyright/*.xml
+.idea/dictionaries/*.xml
+.idea/libraries
+.idea/sonarlint
+out
