@@ -12,3 +12,7 @@ I have no plans to make hana anything more than a learning project at the moment
 * no `null` or `undefined`
 * JVM interop
 * more with time
+
+# Running Tests
+* install [Mill](https://github.com/com-lihaoyi/mill)
+* run `mill hana.test`
