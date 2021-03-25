@@ -23,7 +23,7 @@ object ParserTests extends TestSuite {
 
       test("parse_decimal") {
         test("parse_decimal_with_two_points") {
-          parse("1.5.2", number(_)) // will fail.
+          parse("1.5.2", number(_)) // will fail with NFE.
         }
 
         test("parse_decimal_at_end") {
