@@ -23,5 +23,9 @@ object ParserTests extends TestSuite {
         // fails with 1.0 (stops at non-numeric)
       }
     }
+
+    test("parse identifier") {
+      val Parsed.Success(Expr.Ident("_a1"), _) = parse("_a1", identifier(_))
+    }
   }
 }
