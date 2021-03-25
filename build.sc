@@ -1,7 +1,7 @@
 import mill._, scalalib._
 
 object hana extends ScalaModule {
-  def scalaVersion = "2.13.1"
+  def scalaVersion = "2.13.5"
   override def ivyDeps = Agg(ivy"com.lihaoyi::fastparse::2.2.2")
 
   object test extends Tests {
