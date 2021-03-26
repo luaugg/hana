@@ -1,13 +1,19 @@
-package hana.define
+package hana.syntax
 
 import fastparse._
 import MultiLineWhitespace._
-import Expr._
+import hana.define.Expr
+import hana.define.Expr._
 import scala.collection.{Map => ScalaMap}
 
-object Parser {
+object Literals {
+  private val keywords = Seq("def", "do", "end", "true", "false", "or", "not", "if", "else", "and", "use")
+
   def string[_: P]: P[Str] = P("\"" ~~/ CharsWhile(_ != '"', 0).! ~~ "\"").map(Str)
-  def identifier[_: P]: P[Ident] =  P(CharIn("a-zA-Z_") ~ CharsWhileIn("a-zA-Z0-9_", 0)).!.map(Ident)
+  def identifier[_: P]: P[Ident] = P(CharIn("a-zA-Z_") ~ CharsWhileIn("a-zA-Z0-9_", 0)).!
+    .filter(!keywords.contains(_))
+    .map(Ident)
+
   def map[_: P]: P[Map] = P(emptyMap | occupiedMap)
   def list[_: P]: P[List] = P(emptyList | occupiedList)
   def expr[_: P]: P[Expr] = P(string | identifier | list | map | number)
