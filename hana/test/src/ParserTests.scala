@@ -1,6 +1,6 @@
 import fastparse.{Parsed, parse}
 import hana.define.Expr._
-import hana.define.Parser.{expr, list}
+import hana.define.Parser.expr
 import utest._
 import scala.collection.{Map => ScalaMap}
 
