@@ -4,7 +4,7 @@ import fastparse.{Parsed, parse}
 import hana.define.Expr
 
 object ParserTests extends TestSuite {
-  val tests = Tests {
+  val tests: Tests = Tests {
     test("parse_string") {
       val Parsed.Success(Expr.Str(str), _) = parse("\"Hello, world!\"", expr(_))
       str ==> "Hello, world!"
