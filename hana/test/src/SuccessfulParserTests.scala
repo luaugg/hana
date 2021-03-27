@@ -1,65 +1,29 @@
-import fastparse.{Parsed, parse}
 import hana.define.Literals._
-import hana.syntax.Parser._
 import utest._
-
+import TestUtils._
 import scala.collection.{Map => ScalaMap}
 
 object SuccessfulParserTests extends TestSuite {
   val tests: Tests = Tests {
-    test("string") {
-      val Parsed.Success(Str("Hello, world!"), _) = parse("\"Hello, world!\"", expr(_))
-    }
-
-    test("identifier") {
-      val Parsed.Success(Ident("_a1"), _) = parse("_a1", expr(_))
-    }
+    test("string") { Str("Hello, world!") ==> extract("\"Hello, world!\"") }
+    test("identifier") { Ident("_a1") ==> extract("_a1") }
 
     test("numbers") {
-      test("integer") {
-        val Parsed.Success(Num(123), _) = parse("123", expr(_))
-      }
-
-      test("big_integer") {
-        val Parsed.Success(Num(Double.PositiveInfinity), _) = parse("1".repeat(400), expr(_))
-      }
-
-      test("decimal") {
-        test("parse_normal_decimal") {
-          val Parsed.Success(Num(1.5), _) = parse("1.5", expr(_))
-        }
-
-        test("decimal_at_start") {
-          val Parsed.Success(Num(.5), _) = parse(".5", expr(_))
-        }
-      }
+      test("integer") { Num(123) ==> extract("123")}
+      test("big_integer") { Num(Double.PositiveInfinity) ==> extract("1".repeat(400))}
+      test("decimal") { Num(0.5) ==> extract("0.5") }
     }
 
     test("maps") {
-      test("empty_map") {
-        val Parsed.Success(Map(map), _) = parse("{}", expr(_))
-        map ==> ScalaMap.empty
-      }
-
-      test("occupied_map") {
-        val Parsed.Success(Map(map), _) = parse("{abc -> 54321, \"foo\" -> bar}", expr(_))
-        map(Str("foo")) ==> Ident("bar")
-        map(Ident("abc")) ==> Num(54321)
-      }
+      test("empty_map") { Map(ScalaMap.empty) ==> extract("{}") }
+      test("occupied_map") { Map(ScalaMap(Str("foo") -> Ident("bar"), Ident("abc") -> Num(54321))) ==>
+        extract("{abc -> 54321, \"foo\" -> bar}") }
     }
 
     test("lists") {
-      test("empty_list") {
-        val Parsed.Success(List(seq), _) = parse("[]", expr(_))
-        seq ==> Seq.empty
-      }
-
-      test("occupied_list") {
-        val Parsed.Success(List(Seq(Num(1), Str("foo"), Ident("bar"), Map(map))), _) =
-          parse("[1, \"foo\", bar, {}]", expr(_))
-
-        map ==> ScalaMap.empty
-      }
+      test("empty_list")  { List(Seq.empty) ==> extract("[]") }
+      test("occupied_list")  { List(Seq(Num(1), Str("foo"), Ident("bar"), Map(ScalaMap.empty))) ==>
+        extract("[1, \"foo\", bar, {}]") }
     }
   }
 }
