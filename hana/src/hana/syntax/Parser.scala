@@ -9,11 +9,12 @@ import scala.collection.{Map => ScalaMap}
 object Parser {
   private val keywords = Seq("def", "do", "end", "true", "false", "or", "not", "if", "else", "and", "use")
 
-  def expr[_: P]: P[Literals] = P(string | identifier | list | map | number)
+  def expr[_: P]: P[Literals] = P(identifier | number | string | list | map)
   def string[_: P]: P[Str] = P("\"" ~~/ CharsWhile(_ != '"', 0).! ~~ "\"").map(Str)
-  def map[_: P]: P[Map] = P(emptyMap | occupiedMap)
-  def list[_: P]: P[List] = P(emptyList | occupiedList)
-  def number[_: P]: P[Num] = P(digits.? ~ ("." ~ digits ~ !".").?).!.map(str => Num(str.replace("_", "").toDouble))
+  def map[_: P]: P[Map] = P(occupiedMap | emptyMap)
+  def list[_: P]: P[List] = P(occupiedList | emptyList)
+  def number[_: P]: P[Num] = P((digits.? ~ "." ~ digits ~ !".") | digits).!
+    .map(str => Num(str.replace("_", "").toDouble))
   def identifier[_: P]: P[Ident] = P(CharIn("a-zA-Z_") ~ CharsWhileIn("a-zA-Z0-9_", 0)).!
     .filter(!keywords.contains(_))
     .map(Ident)
