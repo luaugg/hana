@@ -13,7 +13,7 @@ object Parser {
   def string[_: P]: P[Str] = P("\"" ~~/ CharsWhile(_ != '"', 0).! ~~ "\"").map(Str)
   def map[_: P]: P[Map] = P(emptyMap | occupiedMap)
   def list[_: P]: P[List] = P(emptyList | occupiedList)
-  def number[_: P]: P[Num] = P(digits.? ~ ("." ~ digits ~ !".").?).!.map(str => Num(str.toDouble))
+  def number[_: P]: P[Num] = P(digits.? ~ ("." ~ digits ~ !".").?).!.map(str => Num(str.replace("_", "").toDouble))
   def identifier[_: P]: P[Ident] = P(CharIn("a-zA-Z_") ~ CharsWhileIn("a-zA-Z0-9_", 0)).!
     .filter(!keywords.contains(_))
     .map(Ident)
@@ -23,5 +23,5 @@ object Parser {
   private def emptyList[_: P] = P("[]").map(_ => List(Seq.empty))
   private def occupiedMap[_: P] = P("{" ~/ (expr ~/ "->" ~/ expr).rep(0, ",") ~ "}").map(entries => Map(entries.toMap))
   private def occupiedList[_: P] = P("[" ~/ expr.rep(0, ",") ~ "]").map(List)
-  private def digits[_: P] = P(CharsWhileIn("0-9"))
+  private def digits[_: P] = P(CharIn("0-9") ~ (CharsWhileIn("0-9_") ~ !"_").?)
 }
