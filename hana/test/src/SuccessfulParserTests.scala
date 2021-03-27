@@ -1,10 +1,11 @@
 import fastparse.{Parsed, parse}
-import hana.define.Expr._
-import hana.syntax.Literals.expr
+import hana.define.Literals._
+import hana.syntax.Parser._
 import utest._
+
 import scala.collection.{Map => ScalaMap}
 
-object ParserTests extends TestSuite {
+object SuccessfulParserTests extends TestSuite {
   val tests: Tests = Tests {
     test("string") {
       val Parsed.Success(Str("Hello, world!"), _) = parse("\"Hello, world!\"", expr(_))
