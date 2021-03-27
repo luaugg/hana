@@ -11,7 +11,7 @@ object SuccessfulParserTests extends TestSuite {
     test("numbers") {
       test("integer") { Num(123) ==> extract("123")}
       test("big_integer") { Num(Double.PositiveInfinity) ==> extract("1".repeat(400))}
-      test("decimal") { Num(0.5) ==> extract("0.5") }
+      test("decimal") { Num(0.500501) ==> extract(".500_501") }
     }
 
     test("maps") {
