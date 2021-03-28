@@ -31,5 +31,13 @@ object SuccessfulParserTests extends TestSuite {
     test("multiple_lines") {
       Seq(Map(ScalaMap.empty), Empty(), List(Seq.empty), Num(123)) ==> extract("{};;[]\n123", line(_))
     }
+
+    test("functions") {
+      test("function_with_args") { Function("a", Seq("b"), Seq(Empty())) ==>
+        extract("def a(b) do ; end", function(_))
+      }
+
+      test("function_no_args") { Function("a", Seq.empty, Seq(Empty())) ==> extract("def a() do ; end", function(_)) }
+    }
   }
 }
