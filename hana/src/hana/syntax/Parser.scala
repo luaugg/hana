@@ -11,7 +11,7 @@ object Parser {
 
   /* We parse every line and obtain a tree of expressions from that. */
   def line[_: P]: P[Seq[Literals]] = P(tokenStart | comment).rep
-  def expr[_: P]: P[Literals] = P(identifier | number | string | function | list | map)
+  def expr[_: P]: P[Literals] = P(identifier | number | string | list | map | function)
 
   def identifier[_: P]: P[Ident] = P(CharIn("a-zA-Z_") ~ CharsWhileIn("a-zA-Z0-9_", 0)).!
     .filter(!keywords.contains(_))
