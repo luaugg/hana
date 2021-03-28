@@ -11,4 +11,8 @@ object Literals {
   case class Map(map: ScalaMap[Literals, Literals]) extends Literals
   case class List(seq: Seq[_]) extends Literals
   case class Empty() extends Literals // A line without any valid tokens. Filtered when evaluating.
+
+  case class Function(name: String, args: Seq[String], body: Seq[Literals]) extends Literals
+  case class Call(name: String, args: Seq[Literals]) extends Literals
+  case class Match(name: String, value: Literals) extends Literals
 }
