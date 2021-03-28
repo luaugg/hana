@@ -10,4 +10,5 @@ object Literals {
   case class Ident(name: String) extends Literals // things like param names
   case class Map(map: ScalaMap[Literals, Literals]) extends Literals
   case class List(seq: Seq[_]) extends Literals
+  case class Empty() extends Literals // A line without any valid tokens. Filtered when evaluating.
 }
