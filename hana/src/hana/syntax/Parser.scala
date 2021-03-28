@@ -45,6 +45,11 @@ object Parser {
     case (Ident(name), _) => Call(name, Seq.empty)
   }
 
+  // Match parsing
+  def `match`[_: P]: P[Match] = P(identifier ~ "=" ~/ expr).map {
+    case (Ident(name), literal) => Match(name, literal)
+  }
+
   // General/whitespace/comment parsing.
   def line[_: P]: P[Seq[Literals]] = P(tokenStart | comment).rep
   def expr[_: P]: P[Literals] = P(identifier | number | string | list | map | function)
