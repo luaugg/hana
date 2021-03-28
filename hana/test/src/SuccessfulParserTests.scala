@@ -24,16 +24,13 @@ object SuccessfulParserTests extends TestSuite {
     }
 
     test("lists") {
-      test("empty_list")  { List(Seq.empty) ==> extract("[]") }
-      test("occupied_list")  { List(Seq(Num(1), Str("foo"), Ident("bar"), Map(ScalaMap.empty))) ==>
+      test("empty_list") { List(Seq.empty) ==> extract("[]") }
+      test("occupied_list") { List(Seq(Num(1), Str("foo"), Ident("bar"), Map(ScalaMap.empty))) ==>
         extract("[1, \"foo\", bar, {}]") }
     }
 
     test("multiple_lines") {
-      val code1 = "{};;[]\n123"
-
-      val Parsed.Success(seq, _) = parse(code1, line(_))
-      seq ==> Seq(Map(ScalaMap.empty), Empty(), List(Seq.empty), Num(123))
+      Seq(Map(ScalaMap.empty), Empty(), List(Seq.empty), Num(123)) ==> extract("{};;[]\n123", line(_))
     }
   }
 }
