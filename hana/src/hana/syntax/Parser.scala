@@ -52,7 +52,7 @@ object Parser {
 
   // General/whitespace/comment parsing.
   def line[_: P]: P[Seq[Literals]] = P(tokenStart | comment).rep
-  def expr[_: P]: P[Literals] = P(identifier | number | string | list | map | function)
+  def expr[_: P]: P[Literals] = P(identifier | `match` | number | string | list | map | function | call)
 
   private def comment[_: P] = P("#" ~ AnyChar.rep(0)).map(_ => Empty())
   private def tokenStart[_: P] = P((CharIn(";\n\f\r") | Start) ~ expr.?).map {
