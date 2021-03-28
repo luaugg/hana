@@ -22,7 +22,7 @@ object Parser {
     .filter(!keywords.contains(_))
     .map(Ident)
 
-  def function[_: P]: P[Function] = P("def" ~~/ &(" ") ~/ identifier ~ functionArgs ~~ &(" ") ~/ block).map {
+  def function[_: P]: P[Function] = P("def" ~~/ &(" ") ~/ identifier ~ functionArgs ~/ block).map {
     case (Ident(name), Some(args), body) => Function(name, args.map(_.name), body)
     case (Ident(name), _, body) => Function(name, Seq.empty, body)
   }
