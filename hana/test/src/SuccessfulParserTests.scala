@@ -1,6 +1,9 @@
 import hana.define.Literals._
 import utest._
 import TestUtils._
+import fastparse._
+import hana.syntax.Parser._
+
 import scala.collection.{Map => ScalaMap}
 
 object SuccessfulParserTests extends TestSuite {
@@ -24,6 +27,13 @@ object SuccessfulParserTests extends TestSuite {
       test("empty_list")  { List(Seq.empty) ==> extract("[]") }
       test("occupied_list")  { List(Seq(Num(1), Str("foo"), Ident("bar"), Map(ScalaMap.empty))) ==>
         extract("[1, \"foo\", bar, {}]") }
+    }
+
+    test("multiple_lines") {
+      val code1 = "{};;[]\n123"
+
+      val Parsed.Success(seq, _) = parse(code1, line(_))
+      seq ==> Seq(Map(ScalaMap.empty), Empty(), List(Seq.empty), Num(123))
     }
   }
 }
