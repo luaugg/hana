@@ -1,7 +1,6 @@
 import hana.define.Literals._
 import utest._
 import TestUtils._
-import fastparse._
 import hana.syntax.Parser._
 
 import scala.collection.{Map => ScalaMap}
