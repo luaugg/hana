@@ -39,6 +39,12 @@ object Parser {
   private def functionArgs[_: P] = P("(" ~/ identifier.rep(sep = ",").? ~ ")").log
   private def block[_: P] = P("do" ~/ line ~ "end")
 
+  // Function call parsing
+  def call[_: P]: P[Call] = P(identifier ~/ "(" ~/ expr.rep(sep = ",").? ~ ")").map {
+    case (Ident(name), Some(args)) => Call(name, args)
+    case (Ident(name), _) => Call(name, Seq.empty)
+  }
+
   // General/whitespace/comment parsing.
   def line[_: P]: P[Seq[Literals]] = P(tokenStart | comment).rep
   def expr[_: P]: P[Literals] = P(identifier | number | string | list | map | function)
