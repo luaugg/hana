@@ -36,7 +36,7 @@ object Parser {
     case (Ident(name), Some(args), body) => Function(name, args.map(_.name), body)
     case (Ident(name), _, body) => Function(name, Seq.empty, body)
   }
-  private def functionArgs[_: P] = P("(" ~/ identifier.rep(sep = ",").? ~ ")").log
+  private def functionArgs[_: P] = P("(" ~/ identifier.rep(sep = ",").? ~ ")")
   private def block[_: P] = P("do" ~/ line ~ "end")
 
   // Function call parsing
