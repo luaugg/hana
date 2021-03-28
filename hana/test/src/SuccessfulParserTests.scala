@@ -17,14 +17,14 @@ object SuccessfulParserTests extends TestSuite {
     }
 
     test("maps") {
-      test("empty_map") { Map(ScalaMap.empty) ==> extract("{}") }
-      test("occupied_map") { Map(ScalaMap(Str("foo") -> Ident("bar"), Ident("abc") -> Num(54321))) ==>
+      test("empty") { Map(ScalaMap.empty) ==> extract("{}") }
+      test("occupied") { Map(ScalaMap(Str("foo") -> Ident("bar"), Ident("abc") -> Num(54321))) ==>
         extract("{abc -> 54321, \"foo\" -> bar}") }
     }
 
     test("lists") {
-      test("empty_list") { List(Seq.empty) ==> extract("[]") }
-      test("occupied_list") { List(Seq(Num(1), Str("foo"), Ident("bar"), Map(ScalaMap.empty))) ==>
+      test("empty") { List(Seq.empty) ==> extract("[]") }
+      test("occupied") { List(Seq(Num(1), Str("foo"), Ident("bar"), Map(ScalaMap.empty))) ==>
         extract("[1, \"foo\", bar, {}]") }
     }
 
@@ -33,11 +33,13 @@ object SuccessfulParserTests extends TestSuite {
     }
 
     test("functions") {
-      test("function_with_args") { Function("a", Seq("b"), Seq(Empty())) ==>
-        extract("def a(b) do ; end", function(_))
-      }
+      test("args") { Function("a", Seq("b"), Seq(Empty())) ==> extract("def a(b) do ; end", function(_)) }
+      test("no_args") { Function("a", Seq.empty, Seq(Empty())) ==> extract("def a() do ; end", function(_)) }
 
-      test("function_no_args") { Function("a", Seq.empty, Seq(Empty())) ==> extract("def a() do ; end", function(_)) }
+      test("calls") {
+        test("no_args") { Call("a", Seq.empty) ==> extract("a()", call(_)) }
+        test("args") { Call("a", Seq(Num(123))) ==> extract("a(123)", call(_)) }
+      }
     }
   }
 }
