@@ -42,9 +42,10 @@ object SuccessfulParserTests extends TestSuite {
         test("args") { Call("a", Seq(Num(123))) ==> extract("a(123)") }
       }
     }
-    test("match") {
-      Match("a", Match("b", Num(123))) ==> extract("a=b=123", `match`(_))
-    }
     */
+
+    test("match") {
+      Match("a", Match("b", Num(123))) ==> extract("a=b=123", expr(_))
+    }
   }
 }

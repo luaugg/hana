@@ -6,6 +6,8 @@ import hana.define.Expr
 import hana.define.Expr._
 
 object Parser {
+  import Tokens._
+
   private val keywords = Seq("def", "do", "end", "true", "false", "or", "not", "if", "else", "and", "use")
 
   def identifier[_: P]: P[Ident] = P(CharIn("a-zA-Z_") ~ CharsWhileIn("a-zA-Z0-9_", 0)).!
@@ -17,7 +19,14 @@ object Parser {
   def map[_: P]: P[Map] = P("{" ~/ (expr ~/ ("->" | "to") ~/ expr).rep(0, ",") ~ "}").map(kv => Map(kv.toMap))
   def list[_: P]: P[List] = P("[" ~/ expr.rep(0, ",") ~ "]").map(List)
 
-  def expr[_: P]: P[Expr] = P(number | identifier | string | list | map)
+  def expr[_: P]: P[Expr] = P((number | identifier | string | list | map) ~/ suffixToken.?).map {
+    case (Ident(name), Some(MatchToken(right))) => Match(name, right)
+    case (exp, _) => exp
+  }
+
+  def `match`[_: P]: P[MatchToken] = P("=" ~/ expr).map(MatchToken)
+
+  def suffixToken[_: P]: P[Tokens] = P(`match`)
   def line[_: P]: P[Seq[Expr]] = P(tokenStart | comment).rep
 
   private def decimal[_: P] = P(digits.? ~ "." ~ digits ~ !".")
@@ -27,4 +36,10 @@ object Parser {
     case Some(expr) => expr
     case _ => Empty()
   }
+}
+
+sealed trait Tokens
+
+object Tokens {
+  case class MatchToken(right: Expr) extends Tokens
 }
