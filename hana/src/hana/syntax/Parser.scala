@@ -21,12 +21,14 @@ object Parser {
 
   def expr[_: P]: P[Expr] = P((number | identifier | string | list | map) ~/ suffixToken.?).map {
     case (Ident(name), Some(MatchToken(right))) => Match(name, right)
+    case (Ident(name), Some(CallToken(args))) => Call(name, args)
     case (exp, _) => exp
   }
 
   def `match`[_: P]: P[MatchToken] = P("=" ~/ expr).map(MatchToken)
+  def call[_: P]: P[CallToken] = P("(" ~/ expr.rep(0, ",") ~ ")").map(CallToken)
 
-  def suffixToken[_: P]: P[Tokens] = P(`match`)
+  def suffixToken[_: P]: P[Tokens] = P(`match` | call)
   def line[_: P]: P[Seq[Expr]] = P(tokenStart | comment).rep
 
   private def decimal[_: P] = P(digits.? ~ "." ~ digits ~ !".")
@@ -42,4 +44,5 @@ sealed trait Tokens
 
 object Tokens {
   case class MatchToken(right: Expr) extends Tokens
+  case class CallToken(right: Seq[Expr]) extends Tokens
 }
