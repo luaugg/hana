@@ -1,4 +1,4 @@
-import hana.define.Literals._
+import hana.define.Expr._
 import utest._
 import TestUtils._
 import hana.syntax.Parser._
@@ -32,14 +32,19 @@ object SuccessfulParserTests extends TestSuite {
       Seq(Map(ScalaMap.empty), Empty(), List(Seq.empty), Num(123)) ==> extract("{};;[]\n123", line(_))
     }
 
+    /*
     test("functions") {
       test("args") { Function("a", Seq("b"), Seq(Empty())) ==> extract("def a(b) do ; end", function(_)) }
       test("no_args") { Function("a", Seq.empty, Seq(Empty())) ==> extract("def a() do ; end", function(_)) }
 
       test("calls") {
-        test("no_args") { Call("a", Seq.empty) ==> extract("a()", call(_)) }
-        test("args") { Call("a", Seq(Num(123))) ==> extract("a(123)", call(_)) }
+        test("no_args") { Call("a", Seq.empty) ==> extract("a()") }
+        test("args") { Call("a", Seq(Num(123))) ==> extract("a(123)") }
       }
     }
+    test("match") {
+      Match("a", Match("b", Num(123))) ==> extract("a=b=123", `match`(_))
+    }
+    */
   }
 }
