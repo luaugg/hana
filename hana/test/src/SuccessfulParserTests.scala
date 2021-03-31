@@ -34,8 +34,8 @@ object SuccessfulParserTests extends TestSuite {
 
 
     test("functions") {
-      //test("args") { Function("a", Seq("b"), Seq(Empty())) ==> extract("def a(b) do ; end", function(_)) }
-      //test("no_args") { Function("a", Seq.empty, Seq(Empty())) ==> extract("def a() do ; end", function(_)) }
+      test("args") { Function("a", Seq(Ident("b")), Seq(Empty())) ==> extract("def a(b) do ; end", function(_)) }
+      test("no_args") { Function("a", Seq.empty, Seq(Empty())) ==> extract("def a() do ; end", function(_)) }
 
       test("calls") {
         test("no_args") { Call("a", Seq.empty) ==> extract("a()") }
