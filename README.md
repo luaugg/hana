@@ -6,7 +6,6 @@ It is currently nothing more than a bare-bones parser but will be enhanced and u
 I have no plans to make hana anything more than a learning project at the moment.
 
 # Design Goals
-* static types
 * functional (insp. by [Elixir](https://elixir-lang.org))
 * concise (insp. by [Python](https://python.org))
 * no `null` or `undefined`
