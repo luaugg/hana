@@ -26,7 +26,7 @@ object Parser {
   def expr[_: P]: P[Expr] = P((number | identifier | string | function | list | map) ~/ suffixToken.?).map {
     case (Ident(name), Some(MatchToken(right))) => Match(name, right)
     case (Ident(name), Some(CallToken(args))) => Call(name, args)
-    case (Function, Some(_)) => throw ParseException("suffix expression following a function is not allowed")
+    case (_: Function, Some(_)) => throw ParseException("suffix expression following a function is not allowed")
     case (exp, _) => exp
   }
 
